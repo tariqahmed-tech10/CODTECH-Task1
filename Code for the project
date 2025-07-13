@@ -1,0 +1,95 @@
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+
+const int LM35_PIN = A0; 
+
+
+LiquidCrystal_I2C lcd(0x27, 16, 2); 
+
+
+const int BUTTON_PIN = 3;
+
+
+int buttonState = 0;
+
+
+bool displayFahrenheit = false;
+
+void setup() {
+  
+  Serial.begin(9600);
+  Serial.println("LM35 Temperature Sensor Test");
+
+ 
+  lcd.init();
+  lcd.backlight();
+  lcd.print("Initializing...");
+  delay(2000);
+  lcd.clear();
+
+ 
+  pinMode(BUTTON_PIN, INPUT);
+}
+
+void loop() {
+  
+  buttonState = digitalRead(BUTTON_PIN);
+
+ 
+  if (buttonState == HIGH) {
+    displayFahrenheit = !displayFahrenheit; 
+    lcd.clear();
+    delay(1000); 
+    while(digitalRead(BUTTON_PIN) == HIGH);
+    delay(1000); 
+  }
+
+ 
+  int analogValue = analogRead(LM35_PIN);
+
+  
+  float voltage = analogValue * (5.0 / 1024.0);
+
+  
+  float temperatureC = voltage * 100.0;
+
+  
+  float temperatureF = (temperatureC * 9.0 / 5.0) + 32.0;
+
+ 
+  Serial.print(F("Analog Value: "));
+  Serial.print(analogValue);
+  Serial.print(F("\tVoltage: "));
+  Serial.print(voltage);
+  Serial.print(F("V\tTemperature: "));
+  Serial.print(temperatureC);
+  Serial.print(F("°C\t"));
+  Serial.print(temperatureF);
+  Serial.println(F("°F"));
+
+
+  lcd.setCursor(0, 0); 
+  if (displayFahrenheit) {
+    lcd.print("Temp: ");
+    lcd.print(temperatureF, 1); 
+    lcd.print((char)223); 
+    lcd.print("F   "); 
+  } else {
+    lcd.print("Temp: ");
+    lcd.print(temperatureC, 1);
+    lcd.print((char)223);
+    lcd.print("C   "); 
+  }
+
+  lcd.setCursor(0, 1); 
+  lcd.print("Push button to ");
+  if (displayFahrenheit) {
+    lcd.print("C");
+  } else {
+    lcd.print("F");
+  }
+  lcd.print("   "); 
+
+  delay(1000);    
+}
