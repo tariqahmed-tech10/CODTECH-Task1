@@ -26,4 +26,7 @@ The objective of this project is to use a Temperature sensor to read and display
 ### Key Activities 
 -  Using Tinkercad to set up the circuit using Arduino Uno R3 and TMP36 Temperature Sensor.
 -  A LCD Display of dimension 16 * 2 is used.
--  A Push button is used to convert the temperature unit from celsius to Fahrenheit.   
+-  A Push button is used to convert the temperature unit from celsius to Fahrenheit.
+
+  To view the project, please click the below link
+  https://www.tinkercad.com/things/el42xSmirGK-temperature-push-button
